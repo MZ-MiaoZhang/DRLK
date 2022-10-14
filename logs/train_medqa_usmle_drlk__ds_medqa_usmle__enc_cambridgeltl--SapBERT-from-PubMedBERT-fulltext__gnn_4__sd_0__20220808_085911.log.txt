@@ -1,0 +1,512 @@
+Namespace(att_dim=50, att_head_num=2, att_layer_num=1, batch_size=128, cpnet_vocab_path='./data/ddb/vocab.txt', cuda=True, dataset='medqa_usmle', debug=False, decoder_lr=0.001, dev_adj='./data/medqa_usmle/graph/dev.graph.adj.pk', dev_embs='./data/medqa_usmle/features/dev.cambridgeltl--SapBERT-from-PubMedBERT-fulltext.features.pk', dev_statements='./data/medqa_usmle/statement/dev.statement.jsonl', diag_decompose=True, dropoutf=0.2, dropoutg=0.1, dropouti=0.1, encoder='./LM_models/cambridgeltl--SapBERT-from-PubMedBERT-fulltext', encoder_layer=-1, encoder_lr=5e-05, ent_emb=['ddb'], ent_emb_paths=['./data/ddb/ent_emb.npy'], eps=1e-15, eval_batch_size=4, fc_dim=200, fc_layer_num=0, fix_trans=False, format=[], freeze_ent_emb=True, gamma=1.0, gnn_dim=100, gnn_layer_num=4, inhouse=False, inhouse_train_qids='./data/medqa_usmle/inhouse_split_qids.txt', init_identity=True, init_range=0.02, init_rn=True, log_interval=20, loss='cross_entropy', lr_schedule='fixed', max_epochs_before_stop=10, max_grad_norm=1.0, max_node_num=200, max_seq_len=512, mini_batch_size=2, mode='train', n_epochs=100, num_basis=0, num_relation=30, optim='radam', preds_dir='./preds_res/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/', refreeze_epoch=10000, save_dir='./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/', seed=0, simple=False, subsample=1.0, test_adj='./data/medqa_usmle/graph/test.graph.adj.pk', test_embs='./data/medqa_usmle/features/test.cambridgeltl--SapBERT-from-PubMedBERT-fulltext.features.pk', test_statements='./data/medqa_usmle/statement/test.statement.jsonl', train_adj='./data/medqa_usmle/graph/train.graph.adj.pk', train_embs='./data/medqa_usmle/features/train.cambridgeltl--SapBERT-from-PubMedBERT-fulltext.features.pk', train_statements='./data/medqa_usmle/statement/train.statement.jsonl', unfreeze_epoch=0, use_contextualized=False, warmup_steps=50, weight_decay=0.01)
+| num_concepts: 9958 |
+loading adj matrices:   0%|          | 0/40712 [00:00<?, ?it/s]/mnt/zm/DRLK/utils/data_utils.py:256: UserWarning: indexing with dtype torch.uint8 is now deprecated, please use a dtype torch.bool instead. (Triggered internally at  /pytorch/aten/src/ATen/native/IndexingUtils.h:30.)
+  node_type_ids[idx, :num_concept][torch.tensor(
+/mnt/zm/DRLK/utils/data_utils.py:258: UserWarning: indexing with dtype torch.uint8 is now deprecated, please use a dtype torch.bool instead. (Triggered internally at  /pytorch/aten/src/ATen/native/IndexingUtils.h:30.)
+  node_type_ids[idx, :num_concept][torch.tensor(
+loading adj matrices:   2%|▏         | 621/40712 [00:00<00:06, 6206.08it/s]loading adj matrices:   3%|▎         | 1254/40712 [00:00<00:06, 6278.67it/s]loading adj matrices:   5%|▍         | 1882/40712 [00:00<00:06, 6254.29it/s]loading adj matrices:   6%|▌         | 2508/40712 [00:00<00:06, 6236.23it/s]loading adj matrices:   8%|▊         | 3132/40712 [00:00<00:06, 6196.74it/s]loading adj matrices:   9%|▉         | 3754/40712 [00:00<00:05, 6203.33it/s]loading adj matrices:  11%|█         | 4375/40712 [00:00<00:05, 6204.16it/s]loading adj matrices:  12%|█▏        | 4996/40712 [00:00<00:05, 6172.25it/s]loading adj matrices:  14%|█▍        | 5614/40712 [00:00<00:07, 4786.27it/s]loading adj matrices:  15%|█▌        | 6224/40712 [00:01<00:06, 5120.68it/s]loading adj matrices:  17%|█▋        | 6832/40712 [00:01<00:06, 5376.88it/s]loading adj matrices:  18%|█▊        | 7437/40712 [00:01<00:05, 5562.91it/s]loading adj matrices:  20%|█▉        | 8045/40712 [00:01<00:05, 5707.08it/s]loading adj matrices:  21%|██▏       | 8653/40712 [00:01<00:05, 5813.72it/s]loading adj matrices:  23%|██▎       | 9261/40712 [00:01<00:05, 5890.23it/s]loading adj matrices:  24%|██▍       | 9864/40712 [00:01<00:05, 5928.54it/s]loading adj matrices:  26%|██▌       | 10473/40712 [00:01<00:05, 5973.42it/s]loading adj matrices:  27%|██▋       | 11080/40712 [00:01<00:04, 6000.24it/s]loading adj matrices:  29%|██▊       | 11696/40712 [00:01<00:04, 6047.51it/s]loading adj matrices:  30%|███       | 12311/40712 [00:02<00:04, 6075.19it/s]loading adj matrices:  32%|███▏      | 12927/40712 [00:02<00:04, 6097.45it/s]loading adj matrices:  33%|███▎      | 13542/40712 [00:02<00:04, 6112.13it/s]loading adj matrices:  35%|███▍      | 14155/40712 [00:02<00:04, 6103.56it/s]loading adj matrices:  36%|███▋      | 14771/40712 [00:02<00:04, 6120.32it/s]loading adj matrices:  38%|███▊      | 15387/40712 [00:02<00:04, 6130.01it/s]loading adj matrices:  39%|███▉      | 16001/40712 [00:02<00:04, 6101.80it/s]loading adj matrices:  41%|████      | 16612/40712 [00:02<00:03, 6097.55it/s]loading adj matrices:  42%|████▏     | 17228/40712 [00:02<00:03, 6115.54it/s]loading adj matrices:  44%|████▍     | 17840/40712 [00:03<00:03, 6107.07it/s]loading adj matrices:  45%|████▌     | 18451/40712 [00:03<00:03, 6095.74it/s]loading adj matrices:  47%|████▋     | 19068/40712 [00:03<00:03, 6116.59it/s]loading adj matrices:  48%|████▊     | 19682/40712 [00:03<00:03, 6120.55it/s]loading adj matrices:  50%|████▉     | 20295/40712 [00:03<00:03, 6092.79it/s]loading adj matrices:  51%|█████▏    | 20905/40712 [00:03<00:03, 6085.39it/s]loading adj matrices:  53%|█████▎    | 21519/40712 [00:03<00:03, 6099.42it/s]loading adj matrices:  54%|█████▍    | 22129/40712 [00:03<00:03, 6097.29it/s]loading adj matrices:  56%|█████▌    | 22739/40712 [00:03<00:02, 6086.79it/s]loading adj matrices:  57%|█████▋    | 23349/40712 [00:03<00:02, 6087.79it/s]loading adj matrices:  59%|█████▉    | 23965/40712 [00:04<00:02, 6108.06it/s]loading adj matrices:  60%|██████    | 24576/40712 [00:04<00:02, 6077.13it/s]loading adj matrices:  62%|██████▏   | 25184/40712 [00:04<00:02, 6052.61it/s]loading adj matrices:  63%|██████▎   | 25796/40712 [00:04<00:02, 6070.61it/s]loading adj matrices:  65%|██████▍   | 26404/40712 [00:04<00:02, 6055.14it/s]loading adj matrices:  66%|██████▋   | 27010/40712 [00:04<00:02, 6039.33it/s]loading adj matrices:  68%|██████▊   | 27615/40712 [00:04<00:02, 6040.25it/s]loading adj matrices:  69%|██████▉   | 28221/40712 [00:04<00:02, 6044.41it/s]loading adj matrices:  71%|███████   | 28826/40712 [00:04<00:02, 4543.65it/s]loading adj matrices:  72%|███████▏  | 29426/40712 [00:05<00:02, 4896.55it/s]loading adj matrices:  74%|███████▍  | 30035/40712 [00:05<00:02, 5203.86it/s]loading adj matrices:  75%|███████▌  | 30634/40712 [00:05<00:01, 5415.29it/s]loading adj matrices:  77%|███████▋  | 31224/40712 [00:05<00:01, 5549.74it/s]loading adj matrices:  78%|███████▊  | 31829/40712 [00:05<00:01, 5690.27it/s]loading adj matrices:  80%|███████▉  | 32432/40712 [00:05<00:01, 5788.16it/s]loading adj matrices:  81%|████████  | 33023/40712 [00:05<00:01, 5811.31it/s]loading adj matrices:  83%|████████▎ | 33613/40712 [00:05<00:01, 5835.75it/s]loading adj matrices:  84%|████████▍ | 34215/40712 [00:05<00:01, 5889.13it/s]loading adj matrices:  86%|████████▌ | 34809/40712 [00:05<00:01, 5902.43it/s]loading adj matrices:  87%|████████▋ | 35403/40712 [00:06<00:00, 5874.87it/s]loading adj matrices:  88%|████████▊ | 36003/40712 [00:06<00:00, 5908.86it/s]loading adj matrices:  90%|████████▉ | 36600/40712 [00:06<00:00, 5925.22it/s]loading adj matrices:  91%|█████████▏| 37194/40712 [00:06<00:00, 5879.66it/s]loading adj matrices:  93%|█████████▎| 37783/40712 [00:06<00:00, 5864.79it/s]loading adj matrices:  94%|█████████▍| 38381/40712 [00:06<00:00, 5898.23it/s]loading adj matrices:  96%|█████████▌| 38972/40712 [00:06<00:00, 5889.19it/s]loading adj matrices:  97%|█████████▋| 39562/40712 [00:06<00:00, 5857.68it/s]loading adj matrices:  99%|█████████▊| 40148/40712 [00:06<00:00, 5844.30it/s]loading adj matrices: 100%|██████████| 40712/40712 [00:06<00:00, 5873.20it/s]
+| ori_adj_len: 26.49 | adj_len: 26.43 | prune_rate： 0.00 | qc_num: 4.57 | ac_num: 1.06 |
+loading adj matrices:   0%|          | 0/5088 [00:00<?, ?it/s]loading adj matrices:  12%|█▏        | 604/5088 [00:00<00:00, 6036.51it/s]loading adj matrices:  24%|██▍       | 1212/5088 [00:00<00:00, 6057.63it/s]loading adj matrices:  36%|███▌      | 1818/5088 [00:00<00:00, 6044.49it/s]loading adj matrices:  48%|████▊     | 2429/5088 [00:00<00:00, 6066.68it/s]loading adj matrices:  60%|█████▉    | 3036/5088 [00:00<00:00, 6036.11it/s]loading adj matrices:  72%|███████▏  | 3645/5088 [00:00<00:00, 6052.03it/s]loading adj matrices:  84%|████████▎ | 4251/5088 [00:00<00:00, 5861.94it/s]loading adj matrices:  96%|█████████▌| 4862/5088 [00:00<00:00, 5935.86it/s]loading adj matrices: 100%|██████████| 5088/5088 [00:00<00:00, 5984.80it/s]
+| ori_adj_len: 25.20 | adj_len: 25.20 | prune_rate： 0.00 | qc_num: 4.34 | ac_num: 1.07 |
+loading adj matrices:   0%|          | 0/5092 [00:00<?, ?it/s]loading adj matrices:  12%|█▏        | 593/5092 [00:00<00:00, 5928.17it/s]loading adj matrices:  24%|██▎       | 1209/5092 [00:00<00:00, 6059.36it/s]loading adj matrices:  36%|███▌      | 1815/5092 [00:00<00:00, 6030.92it/s]loading adj matrices:  48%|████▊     | 2424/5092 [00:00<00:00, 6051.27it/s]loading adj matrices:  60%|█████▉    | 3030/5092 [00:00<00:00, 6026.66it/s]loading adj matrices:  71%|███████▏  | 3640/5092 [00:00<00:00, 6049.86it/s]loading adj matrices:  83%|████████▎ | 4246/5092 [00:00<00:00, 5854.97it/s]loading adj matrices:  95%|█████████▍| 4833/5092 [00:00<00:00, 5837.54it/s]loading adj matrices: 100%|██████████| 5092/5092 [00:00<00:00, 5904.86it/s]
+| ori_adj_len: 26.09 | adj_len: 26.06 | prune_rate： 0.00 | qc_num: 4.61 | ac_num: 1.06 |
+parameters:
+	concept_emb.emb.weight                       	fixed	torch.Size([9958, 768])
+	concept_emb.cpt_transform.weight             	trainable	torch.Size([100, 768])
+	concept_emb.cpt_transform.bias               	trainable	torch.Size([100])
+	reasoningnet.inter_layers.0.typed_transform.weight	trainable	torch.Size([300, 100])
+	reasoningnet.inter_layers.0.typed_transform.bias	trainable	torch.Size([300])
+	reasoningnet.inter_layers.0.path_attention.trans_scores	trainable	torch.Size([900])
+	reasoningnet.inter_layers.0.path_attention.start_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.0.path_attention.start_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.start_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.start_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.start_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.0.path_attention.start_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.0.path_attention.end_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.0.path_attention.end_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.end_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.end_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.end_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.0.path_attention.end_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.0.path_attention.path_uni_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.0.path_attention.path_uni_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.path_uni_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.path_uni_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.0.path_attention.path_uni_attention.layers.1-Linear.weight	trainable	torch.Size([30, 50])
+	reasoningnet.inter_layers.0.path_attention.path_uni_attention.layers.1-Linear.bias	trainable	torch.Size([30])
+	reasoningnet.inter_layers.0.message_passing.w_vs	trainable	torch.Size([1, 100, 31])
+	reasoningnet.inter_layers.0.aggregator.w_qs.weight	trainable	torch.Size([100, 768])
+	reasoningnet.inter_layers.0.aggregator.w_qs.bias	trainable	torch.Size([100])
+	reasoningnet.inter_layers.0.Vh.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.0.Vh.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.0.Vz.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.0.Vz.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.1.typed_transform.weight	trainable	torch.Size([300, 100])
+	reasoningnet.inter_layers.1.typed_transform.bias	trainable	torch.Size([300])
+	reasoningnet.inter_layers.1.path_attention.trans_scores	trainable	torch.Size([900])
+	reasoningnet.inter_layers.1.path_attention.start_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.1.path_attention.start_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.start_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.start_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.start_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.1.path_attention.start_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.1.path_attention.end_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.1.path_attention.end_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.end_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.end_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.end_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.1.path_attention.end_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.1.path_attention.path_uni_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.1.path_attention.path_uni_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.path_uni_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.path_uni_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.1.path_attention.path_uni_attention.layers.1-Linear.weight	trainable	torch.Size([30, 50])
+	reasoningnet.inter_layers.1.path_attention.path_uni_attention.layers.1-Linear.bias	trainable	torch.Size([30])
+	reasoningnet.inter_layers.1.message_passing.w_vs	trainable	torch.Size([1, 100, 31])
+	reasoningnet.inter_layers.1.aggregator.w_qs.weight	trainable	torch.Size([100, 768])
+	reasoningnet.inter_layers.1.aggregator.w_qs.bias	trainable	torch.Size([100])
+	reasoningnet.inter_layers.1.Vh.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.1.Vh.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.1.Vz.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.1.Vz.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.2.typed_transform.weight	trainable	torch.Size([300, 100])
+	reasoningnet.inter_layers.2.typed_transform.bias	trainable	torch.Size([300])
+	reasoningnet.inter_layers.2.path_attention.trans_scores	trainable	torch.Size([900])
+	reasoningnet.inter_layers.2.path_attention.start_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.2.path_attention.start_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.start_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.start_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.start_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.2.path_attention.start_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.2.path_attention.end_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.2.path_attention.end_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.end_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.end_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.end_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.2.path_attention.end_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.2.path_attention.path_uni_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.2.path_attention.path_uni_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.path_uni_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.path_uni_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.2.path_attention.path_uni_attention.layers.1-Linear.weight	trainable	torch.Size([30, 50])
+	reasoningnet.inter_layers.2.path_attention.path_uni_attention.layers.1-Linear.bias	trainable	torch.Size([30])
+	reasoningnet.inter_layers.2.message_passing.w_vs	trainable	torch.Size([1, 100, 31])
+	reasoningnet.inter_layers.2.aggregator.w_qs.weight	trainable	torch.Size([100, 768])
+	reasoningnet.inter_layers.2.aggregator.w_qs.bias	trainable	torch.Size([100])
+	reasoningnet.inter_layers.2.Vh.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.2.Vh.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.2.Vz.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.2.Vz.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.3.typed_transform.weight	trainable	torch.Size([300, 100])
+	reasoningnet.inter_layers.3.typed_transform.bias	trainable	torch.Size([300])
+	reasoningnet.inter_layers.3.path_attention.trans_scores	trainable	torch.Size([900])
+	reasoningnet.inter_layers.3.path_attention.start_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.3.path_attention.start_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.start_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.start_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.start_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.3.path_attention.start_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.3.path_attention.end_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.3.path_attention.end_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.end_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.end_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.end_attention.layers.1-Linear.weight	trainable	torch.Size([3, 50])
+	reasoningnet.inter_layers.3.path_attention.end_attention.layers.1-Linear.bias	trainable	torch.Size([3])
+	reasoningnet.inter_layers.3.path_attention.path_uni_attention.layers.0-Linear.weight	trainable	torch.Size([50, 768])
+	reasoningnet.inter_layers.3.path_attention.path_uni_attention.layers.0-Linear.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.path_uni_attention.layers.0-LayerNorm.weight	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.path_uni_attention.layers.0-LayerNorm.bias	trainable	torch.Size([50])
+	reasoningnet.inter_layers.3.path_attention.path_uni_attention.layers.1-Linear.weight	trainable	torch.Size([30, 50])
+	reasoningnet.inter_layers.3.path_attention.path_uni_attention.layers.1-Linear.bias	trainable	torch.Size([30])
+	reasoningnet.inter_layers.3.message_passing.w_vs	trainable	torch.Size([1, 100, 31])
+	reasoningnet.inter_layers.3.aggregator.w_qs.weight	trainable	torch.Size([100, 768])
+	reasoningnet.inter_layers.3.aggregator.w_qs.bias	trainable	torch.Size([100])
+	reasoningnet.inter_layers.3.Vh.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.3.Vh.bias          	trainable	torch.Size([100])
+	reasoningnet.inter_layers.3.Vz.weight        	trainable	torch.Size([100, 100])
+	reasoningnet.inter_layers.3.Vz.bias          	trainable	torch.Size([100])
+	reasoningnet.intra_layers_interact.w_qs.weight	trainable	torch.Size([100, 768])
+	reasoningnet.intra_layers_interact.w_qs.bias 	trainable	torch.Size([100])
+	reasoningnet.intra_layers_interact.w_ks.weight	trainable	torch.Size([100, 100])
+	reasoningnet.intra_layers_interact.w_ks.bias 	trainable	torch.Size([100])
+	reasoningnet.intra_layers_interact.w_vs.weight	trainable	torch.Size([100, 100])
+	reasoningnet.intra_layers_interact.w_vs.bias 	trainable	torch.Size([100])
+	reasoningnet.intra_layers_feature.layers.0-Linear.weight	trainable	torch.Size([384, 768])
+	reasoningnet.intra_layers_feature.layers.0-Linear.bias	trainable	torch.Size([384])
+	reasoningnet.intra_layers_feature.layers.0-LayerNorm.weight	trainable	torch.Size([384])
+	reasoningnet.intra_layers_feature.layers.0-LayerNorm.bias	trainable	torch.Size([384])
+	reasoningnet.intra_layers_feature.layers.1-Linear.weight	trainable	torch.Size([768, 384])
+	reasoningnet.intra_layers_feature.layers.1-Linear.bias	trainable	torch.Size([768])
+	reasoningnet.linear.weight                   	trainable	torch.Size([100, 768])
+	reasoningnet.linear.bias                     	trainable	torch.Size([100])
+	reasoningnet.ln_layers.0.weight              	trainable	torch.Size([100, 100])
+	reasoningnet.ln_layers.0.bias                	trainable	torch.Size([100])
+	reasoningnet.ln_layers.1.weight              	trainable	torch.Size([100, 100])
+	reasoningnet.ln_layers.1.bias                	trainable	torch.Size([100])
+	reasoningnet.ln_layers.2.weight              	trainable	torch.Size([100, 100])
+	reasoningnet.ln_layers.2.bias                	trainable	torch.Size([100])
+	reasoningnet.ln_layers.3.weight              	trainable	torch.Size([100, 100])
+	reasoningnet.ln_layers.3.bias                	trainable	torch.Size([100])
+	pred_pooler.w_qs.weight                      	trainable	torch.Size([100, 768])
+	pred_pooler.w_qs.bias                        	trainable	torch.Size([100])
+	pred_pooler.w_ks.weight                      	trainable	torch.Size([100, 100])
+	pred_pooler.w_ks.bias                        	trainable	torch.Size([100])
+	pred_pooler.w_vs.weight                      	trainable	torch.Size([100, 100])
+	pred_pooler.w_vs.bias                        	trainable	torch.Size([100])
+	pred_fc.layers.0-Linear.weight               	trainable	torch.Size([1, 868])
+	pred_fc.layers.0-Linear.bias                 	trainable	torch.Size([1])
+	total: 1976557
+-----------------------------------------------------------------------
+/mnt/zm/DRLK/utils/optimization_utils.py:61: UserWarning: This overload of addcmul_ is deprecated:
+	addcmul_(Number value, Tensor tensor1, Tensor tensor2)
+Consider using one of the following signatures instead:
+	addcmul_(Tensor tensor1, Tensor tensor2, *, Number value) (Triggered internally at  /pytorch/torch/csrc/utils/python_arg_parser.cpp:1005.)
+  exp_avg_sq.mul_(beta2).addcmul_(1 - beta2, grad, grad)
+/home/zm/IDE/anaconda3/envs/ekprn_latest/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:247: UserWarning: To get the last learning rate computed by the scheduler, please use `get_last_lr()`.
+  warnings.warn("To get the last learning rate computed by the scheduler, "
+| step    19 |  lr: 0.0000500 | loss  1.3942 | ms/batch 15717.92 |
+| step    39 |  lr: 0.0000500 | loss  1.3957 | ms/batch 15037.79 |
+| step    59 |  lr: 0.0000500 | loss  1.3982 | ms/batch 15795.24 |
+| step    79 |  lr: 0.0000500 | loss  1.3931 | ms/batch 14871.52 |
+-----------------------------------------------------------------------
+| step    80 | dev_acc  0.2885 | test_acc  0.2584 |
+train_time : 1228.45 | eval_time : 85.28
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step    99 |  lr: 0.0000500 | loss  1.3895 | ms/batch 15685.32 |
+| step   119 |  lr: 0.0000500 | loss  1.3930 | ms/batch 15705.71 |
+| step   139 |  lr: 0.0000500 | loss  1.3857 | ms/batch 15832.12 |
+| step   159 |  lr: 0.0000500 | loss  1.3895 | ms/batch 15285.90 |
+-----------------------------------------------------------------------
+| step   160 | dev_acc  0.2767 | test_acc  0.2899 |
+train_time : 1250.18 | eval_time : 87.58
+-----------------------------------------------------------------------
+| step   179 |  lr: 0.0000500 | loss  1.3787 | ms/batch 15740.07 |
+| step   199 |  lr: 0.0000500 | loss  1.3728 | ms/batch 15404.34 |
+| step   219 |  lr: 0.0000500 | loss  1.3746 | ms/batch 15150.55 |
+| step   239 |  lr: 0.0000500 | loss  1.3536 | ms/batch 13817.38 |
+-----------------------------------------------------------------------
+| step   240 | dev_acc  0.3302 | test_acc  0.3291 |
+train_time : 1202.25 | eval_time : 84.25
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   259 |  lr: 0.0000500 | loss  1.3193 | ms/batch 14752.60 |
+| step   279 |  lr: 0.0000500 | loss  1.3176 | ms/batch 14667.44 |
+| step   299 |  lr: 0.0000500 | loss  1.3151 | ms/batch 14991.46 |
+| step   319 |  lr: 0.0000500 | loss  1.3110 | ms/batch 14411.25 |
+-----------------------------------------------------------------------
+| step   320 | dev_acc  0.3491 | test_acc  0.3488 |
+train_time : 1176.45 | eval_time : 85.18
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   339 |  lr: 0.0000500 | loss  1.2411 | ms/batch 16225.35 |
+| step   359 |  lr: 0.0000500 | loss  1.2211 | ms/batch 15643.86 |
+| step   379 |  lr: 0.0000500 | loss  1.2344 | ms/batch 15411.69 |
+| step   399 |  lr: 0.0000500 | loss  1.2129 | ms/batch 15009.99 |
+-----------------------------------------------------------------------
+| step   400 | dev_acc  0.3467 | test_acc  0.3668 |
+train_time : 1245.82 | eval_time : 87.01
+-----------------------------------------------------------------------
+| step   419 |  lr: 0.0000500 | loss  1.0933 | ms/batch 15507.60 |
+| step   439 |  lr: 0.0000500 | loss  1.1011 | ms/batch 15753.23 |
+| step   459 |  lr: 0.0000500 | loss  1.1028 | ms/batch 15630.63 |
+| step   479 |  lr: 0.0000500 | loss  1.0881 | ms/batch 15321.03 |
+-----------------------------------------------------------------------
+| step   480 | dev_acc  0.3608 | test_acc  0.3841 |
+train_time : 1244.25 | eval_time : 86.76
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   499 |  lr: 0.0000500 | loss  0.9389 | ms/batch 15592.20 |
+| step   519 |  lr: 0.0000500 | loss  0.9614 | ms/batch 15610.25 |
+| step   539 |  lr: 0.0000500 | loss  0.9404 | ms/batch 14472.80 |
+| step   559 |  lr: 0.0000500 | loss  0.9823 | ms/batch 14610.29 |
+-----------------------------------------------------------------------
+| step   560 | dev_acc  0.3624 | test_acc  0.3747 |
+train_time : 1205.71 | eval_time : 84.89
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   579 |  lr: 0.0000500 | loss  0.8143 | ms/batch 16110.34 |
+| step   599 |  lr: 0.0000500 | loss  0.7938 | ms/batch 16290.05 |
+| step   619 |  lr: 0.0000500 | loss  0.8068 | ms/batch 15293.17 |
+| step   639 |  lr: 0.0000500 | loss  0.7962 | ms/batch 15036.66 |
+-----------------------------------------------------------------------
+| step   640 | dev_acc  0.3695 | test_acc  0.3959 |
+train_time : 1254.60 | eval_time : 84.67
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   659 |  lr: 0.0000500 | loss  0.6482 | ms/batch 15291.14 |
+| step   679 |  lr: 0.0000500 | loss  0.6536 | ms/batch 15803.61 |
+| step   699 |  lr: 0.0000500 | loss  0.6746 | ms/batch 38643.31 |
+| step   719 |  lr: 0.0000500 | loss  0.6868 | ms/batch 43147.91 |
+-----------------------------------------------------------------------
+| step   720 | dev_acc  0.3726 | test_acc  0.3653 |
+train_time : 2257.72 | eval_time : 725.15
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   739 |  lr: 0.0000500 | loss  0.5365 | ms/batch 43545.26 |
+| step   759 |  lr: 0.0000500 | loss  0.5287 | ms/batch 43034.92 |
+| step   779 |  lr: 0.0000500 | loss  0.5438 | ms/batch 43028.94 |
+| step   799 |  lr: 0.0000500 | loss  0.5975 | ms/batch 39841.64 |
+-----------------------------------------------------------------------
+| step   800 | dev_acc  0.3648 | test_acc  0.3763 |
+train_time : 3389.01 | eval_time : 799.08
+-----------------------------------------------------------------------
+| step   819 |  lr: 0.0000500 | loss  0.4010 | ms/batch 35731.37 |
+| step   839 |  lr: 0.0000500 | loss  0.4382 | ms/batch 33314.29 |
+| step   859 |  lr: 0.0000500 | loss  0.4403 | ms/batch 38879.99 |
+| step   879 |  lr: 0.0000500 | loss  0.4732 | ms/batch 39197.65 |
+-----------------------------------------------------------------------
+| step   880 | dev_acc  0.3656 | test_acc  0.3723 |
+train_time : 2942.47 | eval_time : 591.40
+-----------------------------------------------------------------------
+| step   899 |  lr: 0.0000500 | loss  0.3712 | ms/batch 41269.16 |
+| step   919 |  lr: 0.0000500 | loss  0.3226 | ms/batch 37484.28 |
+| step   939 |  lr: 0.0000500 | loss  0.3900 | ms/batch 41961.99 |
+| step   959 |  lr: 0.0000500 | loss  0.3744 | ms/batch 39824.63 |
+-----------------------------------------------------------------------
+| step   960 | dev_acc  0.3774 | test_acc  0.3668 |
+train_time : 3210.80 | eval_time : 84.52
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step   979 |  lr: 0.0000500 | loss  0.2668 | ms/batch 15525.03 |
+| step   999 |  lr: 0.0000500 | loss  0.3084 | ms/batch 15522.52 |
+| step  1019 |  lr: 0.0000500 | loss  0.3017 | ms/batch 15797.85 |
+| step  1039 |  lr: 0.0000500 | loss  0.3107 | ms/batch 15510.41 |
+-----------------------------------------------------------------------
+| step  1040 | dev_acc  0.3608 | test_acc  0.3794 |
+train_time : 1247.11 | eval_time : 84.45
+-----------------------------------------------------------------------
+| step  1059 |  lr: 0.0000500 | loss  0.2358 | ms/batch 16193.05 |
+| step  1079 |  lr: 0.0000500 | loss  0.2481 | ms/batch 15234.70 |
+| step  1099 |  lr: 0.0000500 | loss  0.2424 | ms/batch 15572.61 |
+| step  1119 |  lr: 0.0000500 | loss  0.2617 | ms/batch 15445.14 |
+-----------------------------------------------------------------------
+| step  1120 | dev_acc  0.3569 | test_acc  0.3865 |
+train_time : 1248.91 | eval_time : 85.52
+-----------------------------------------------------------------------
+| step  1139 |  lr: 0.0000500 | loss  0.1956 | ms/batch 15478.53 |
+| step  1159 |  lr: 0.0000500 | loss  0.2077 | ms/batch 16156.33 |
+| step  1179 |  lr: 0.0000500 | loss  0.2079 | ms/batch 15275.88 |
+| step  1199 |  lr: 0.0000500 | loss  0.2293 | ms/batch 15375.55 |
+-----------------------------------------------------------------------
+| step  1200 | dev_acc  0.3742 | test_acc  0.3936 |
+train_time : 1245.73 | eval_time : 84.31
+-----------------------------------------------------------------------
+| step  1219 |  lr: 0.0000500 | loss  0.1670 | ms/batch 14693.12 |
+| step  1239 |  lr: 0.0000500 | loss  0.2004 | ms/batch 14367.53 |
+| step  1259 |  lr: 0.0000500 | loss  0.1922 | ms/batch 15176.82 |
+| step  1279 |  lr: 0.0000500 | loss  0.2077 | ms/batch 14822.18 |
+-----------------------------------------------------------------------
+| step  1280 | dev_acc  0.3640 | test_acc  0.3802 |
+train_time : 1181.19 | eval_time : 84.71
+-----------------------------------------------------------------------
+| step  1299 |  lr: 0.0000500 | loss  0.1607 | ms/batch 14672.87 |
+| step  1319 |  lr: 0.0000500 | loss  0.1663 | ms/batch 14610.60 |
+| step  1339 |  lr: 0.0000500 | loss  0.1715 | ms/batch 14970.96 |
+| step  1359 |  lr: 0.0000500 | loss  0.1607 | ms/batch 14295.31 |
+-----------------------------------------------------------------------
+| step  1360 | dev_acc  0.3813 | test_acc  0.3865 |
+train_time : 1170.99 | eval_time : 84.54
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step  1379 |  lr: 0.0000500 | loss  0.1118 | ms/batch 15718.67 |
+| step  1399 |  lr: 0.0000500 | loss  0.1469 | ms/batch 15482.39 |
+| step  1419 |  lr: 0.0000500 | loss  0.1599 | ms/batch 15780.00 |
+| step  1439 |  lr: 0.0000500 | loss  0.1544 | ms/batch 15516.63 |
+-----------------------------------------------------------------------
+| step  1440 | dev_acc  0.3742 | test_acc  0.3841 |
+train_time : 1249.95 | eval_time : 85.40
+-----------------------------------------------------------------------
+| step  1459 |  lr: 0.0000500 | loss  0.1094 | ms/batch 16057.94 |
+| step  1479 |  lr: 0.0000500 | loss  0.1240 | ms/batch 15745.35 |
+| step  1499 |  lr: 0.0000500 | loss  0.1302 | ms/batch 15176.29 |
+| step  1519 |  lr: 0.0000500 | loss  0.1619 | ms/batch 15729.56 |
+-----------------------------------------------------------------------
+| step  1520 | dev_acc  0.3734 | test_acc  0.3826 |
+train_time : 1254.18 | eval_time : 85.51
+-----------------------------------------------------------------------
+| step  1539 |  lr: 0.0000500 | loss  0.1093 | ms/batch 15583.85 |
+| step  1559 |  lr: 0.0000500 | loss  0.0981 | ms/batch 15849.32 |
+| step  1579 |  lr: 0.0000500 | loss  0.1271 | ms/batch 15754.29 |
+| step  1599 |  lr: 0.0000500 | loss  0.1142 | ms/batch 15502.37 |
+-----------------------------------------------------------------------
+| step  1600 | dev_acc  0.3687 | test_acc  0.4022 |
+train_time : 1253.80 | eval_time : 86.64
+-----------------------------------------------------------------------
+| step  1619 |  lr: 0.0000500 | loss  0.0895 | ms/batch 15048.95 |
+| step  1639 |  lr: 0.0000500 | loss  0.0929 | ms/batch 15686.13 |
+| step  1659 |  lr: 0.0000500 | loss  0.1053 | ms/batch 15964.27 |
+| step  1679 |  lr: 0.0000500 | loss  0.1034 | ms/batch 15364.91 |
+-----------------------------------------------------------------------
+| step  1680 | dev_acc  0.3742 | test_acc  0.3920 |
+train_time : 1241.28 | eval_time : 84.32
+-----------------------------------------------------------------------
+| step  1699 |  lr: 0.0000500 | loss  0.1005 | ms/batch 16176.81 |
+| step  1719 |  lr: 0.0000500 | loss  0.0908 | ms/batch 14417.97 |
+| step  1739 |  lr: 0.0000500 | loss  0.1132 | ms/batch 14953.02 |
+| step  1759 |  lr: 0.0000500 | loss  0.1112 | ms/batch 14405.26 |
+-----------------------------------------------------------------------
+| step  1760 | dev_acc  0.3616 | test_acc  0.3826 |
+train_time : 1199.06 | eval_time : 85.07
+-----------------------------------------------------------------------
+| step  1779 |  lr: 0.0000500 | loss  0.0920 | ms/batch 14070.89 |
+| step  1799 |  lr: 0.0000500 | loss  0.0783 | ms/batch 14620.36 |
+| step  1819 |  lr: 0.0000500 | loss  0.1005 | ms/batch 15120.11 |
+| step  1839 |  lr: 0.0000500 | loss  0.0913 | ms/batch 15249.12 |
+-----------------------------------------------------------------------
+| step  1840 | dev_acc  0.3648 | test_acc  0.3865 |
+train_time : 1181.21 | eval_time : 84.68
+-----------------------------------------------------------------------
+| step  1859 |  lr: 0.0000500 | loss  0.0946 | ms/batch 15589.25 |
+| step  1879 |  lr: 0.0000500 | loss  0.0767 | ms/batch 16027.83 |
+| step  1899 |  lr: 0.0000500 | loss  0.1022 | ms/batch 15932.04 |
+| step  1919 |  lr: 0.0000500 | loss  0.0784 | ms/batch 14851.66 |
+-----------------------------------------------------------------------
+| step  1920 | dev_acc  0.3789 | test_acc  0.3951 |
+train_time : 1248.02 | eval_time : 85.22
+-----------------------------------------------------------------------
+| step  1939 |  lr: 0.0000500 | loss  0.0753 | ms/batch 16178.50 |
+| step  1959 |  lr: 0.0000500 | loss  0.0718 | ms/batch 15714.10 |
+| step  1979 |  lr: 0.0000500 | loss  0.0897 | ms/batch 15219.98 |
+| step  1999 |  lr: 0.0000500 | loss  0.0822 | ms/batch 15628.94 |
+-----------------------------------------------------------------------
+| step  2000 | dev_acc  0.3726 | test_acc  0.3959 |
+train_time : 1254.83 | eval_time : 84.63
+-----------------------------------------------------------------------
+| step  2019 |  lr: 0.0000500 | loss  0.0695 | ms/batch 15499.84 |
+| step  2039 |  lr: 0.0000500 | loss  0.0710 | ms/batch 15950.56 |
+| step  2059 |  lr: 0.0000500 | loss  0.0699 | ms/batch 15031.33 |
+| step  2079 |  lr: 0.0000500 | loss  0.0886 | ms/batch 15899.98 |
+-----------------------------------------------------------------------
+| step  2080 | dev_acc  0.3884 | test_acc  0.3786 |
+train_time : 1247.63 | eval_time : 84.81
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step  2099 |  lr: 0.0000500 | loss  0.0728 | ms/batch 15572.78 |
+| step  2119 |  lr: 0.0000500 | loss  0.0572 | ms/batch 15570.66 |
+| step  2139 |  lr: 0.0000500 | loss  0.0735 | ms/batch 15588.00 |
+| step  2159 |  lr: 0.0000500 | loss  0.0831 | ms/batch 15204.31 |
+-----------------------------------------------------------------------
+| step  2160 | dev_acc  0.3781 | test_acc  0.3802 |
+train_time : 1238.71 | eval_time : 85.24
+-----------------------------------------------------------------------
+| step  2179 |  lr: 0.0000500 | loss  0.0573 | ms/batch 14550.85 |
+| step  2199 |  lr: 0.0000500 | loss  0.0700 | ms/batch 15391.08 |
+| step  2219 |  lr: 0.0000500 | loss  0.0763 | ms/batch 14680.51 |
+| step  2239 |  lr: 0.0000500 | loss  0.0740 | ms/batch 14489.27 |
+-----------------------------------------------------------------------
+| step  2240 | dev_acc  0.3687 | test_acc  0.3896 |
+train_time : 1182.23 | eval_time : 85.33
+-----------------------------------------------------------------------
+| step  2259 |  lr: 0.0000500 | loss  0.0562 | ms/batch 14746.91 |
+| step  2279 |  lr: 0.0000500 | loss  0.0724 | ms/batch 15939.90 |
+| step  2299 |  lr: 0.0000500 | loss  0.0647 | ms/batch 15229.93 |
+| step  2319 |  lr: 0.0000500 | loss  0.0562 | ms/batch 15166.78 |
+-----------------------------------------------------------------------
+| step  2320 | dev_acc  0.3742 | test_acc  0.4022 |
+train_time : 1221.67 | eval_time : 84.58
+-----------------------------------------------------------------------
+| step  2339 |  lr: 0.0000500 | loss  0.0426 | ms/batch 15224.06 |
+| step  2359 |  lr: 0.0000500 | loss  0.0487 | ms/batch 15601.92 |
+| step  2379 |  lr: 0.0000500 | loss  0.0674 | ms/batch 15689.51 |
+| step  2399 |  lr: 0.0000500 | loss  0.0565 | ms/batch 15122.12 |
+-----------------------------------------------------------------------
+| step  2400 | dev_acc  0.3789 | test_acc  0.4006 |
+train_time : 1232.75 | eval_time : 85.51
+-----------------------------------------------------------------------
+| step  2419 |  lr: 0.0000500 | loss  0.0619 | ms/batch 16376.63 |
+| step  2439 |  lr: 0.0000500 | loss  0.0617 | ms/batch 15176.50 |
+| step  2459 |  lr: 0.0000500 | loss  0.0673 | ms/batch 15767.09 |
+| step  2479 |  lr: 0.0000500 | loss  0.0679 | ms/batch 15096.76 |
+-----------------------------------------------------------------------
+| step  2480 | dev_acc  0.3907 | test_acc  0.4038 |
+train_time : 1248.34 | eval_time : 84.65
+-----------------------------------------------------------------------
+model saved to ./saved_models/medqa_usmle/drlk__ds_medqa_usmle__enc_cambridgeltl--SapBERT-from-PubMedBERT-fulltext__gnn_4__sd_0__20220808_085911/medqa_usmle_best.pt
+| step  2499 |  lr: 0.0000500 | loss  0.0560 | ms/batch 16084.89 |
+| step  2519 |  lr: 0.0000500 | loss  0.0534 | ms/batch 15072.66 |
+| step  2539 |  lr: 0.0000500 | loss  0.0551 | ms/batch 15744.29 |
+| step  2559 |  lr: 0.0000500 | loss  0.0602 | ms/batch 15275.47 |
+-----------------------------------------------------------------------
+| step  2560 | dev_acc  0.3687 | test_acc  0.3849 |
+train_time : 1243.54 | eval_time : 84.62
+-----------------------------------------------------------------------
+| step  2579 |  lr: 0.0000500 | loss  0.0552 | ms/batch 15616.61 |
+| step  2599 |  lr: 0.0000500 | loss  0.0425 | ms/batch 15646.31 |
+| step  2619 |  lr: 0.0000500 | loss  0.0477 | ms/batch 15601.17 |
+| step  2639 |  lr: 0.0000500 | loss  0.0558 | ms/batch 15520.80 |
+-----------------------------------------------------------------------
+| step  2640 | dev_acc  0.3687 | test_acc  0.3881 |
+train_time : 1247.70 | eval_time : 86.32
+-----------------------------------------------------------------------
+| step  2659 |  lr: 0.0000500 | loss  0.0542 | ms/batch 15380.62 |
+| step  2679 |  lr: 0.0000500 | loss  0.0606 | ms/batch 15507.44 |
+| step  2699 |  lr: 0.0000500 | loss  0.0483 | ms/batch 15545.87 |
+| step  2719 |  lr: 0.0000500 | loss  0.0559 | ms/batch 15318.77 |
+-----------------------------------------------------------------------
+| step  2720 | dev_acc  0.3758 | test_acc  0.3865 |
+train_time : 1235.05 | eval_time : 85.16
+-----------------------------------------------------------------------
+| step  2739 |  lr: 0.0000500 | loss  0.0517 | ms/batch 16072.18 |
+| step  2759 |  lr: 0.0000500 | loss  0.0440 | ms/batch 15697.25 |
+| step  2779 |  lr: 0.0000500 | loss  0.0528 | ms/batch 15842.10 |
+| step  2799 |  lr: 0.0000500 | loss  0.0468 | ms/batch 15654.29 |
+-----------------------------------------------------------------------
+| step  2800 | dev_acc  0.3805 | test_acc  0.3959 |
+train_time : 1265.32 | eval_time : 85.35
+-----------------------------------------------------------------------
+| step  2819 |  lr: 0.0000500 | loss  0.0398 | ms/batch 15920.77 |
+| step  2839 |  lr: 0.0000500 | loss  0.0541 | ms/batch 15669.92 |
+| step  2859 |  lr: 0.0000500 | loss  0.0414 | ms/batch 15058.32 |
+| step  2879 |  lr: 0.0000500 | loss  0.0705 | ms/batch 15689.16 |
+-----------------------------------------------------------------------
+| step  2880 | dev_acc  0.3656 | test_acc  0.3826 |
+train_time : 1246.76 | eval_time : 87.45
+-----------------------------------------------------------------------
+| step  2899 |  lr: 0.0000500 | loss  0.0443 | ms/batch 14761.37 |
+| step  2919 |  lr: 0.0000500 | loss  0.0323 | ms/batch 14664.25 |
+| step  2939 |  lr: 0.0000500 | loss  0.0421 | ms/batch 14225.67 |
+| step  2959 |  lr: 0.0000500 | loss  0.0358 | ms/batch 14875.89 |
+-----------------------------------------------------------------------
+| step  2960 | dev_acc  0.3884 | test_acc  0.4061 |
+train_time : 1170.54 | eval_time : 85.34
+-----------------------------------------------------------------------
+| step  2979 |  lr: 0.0000500 | loss  0.0391 | ms/batch 15162.05 |
+| step  2999 |  lr: 0.0000500 | loss  0.0317 | ms/batch 15644.08 |
+| step  3019 |  lr: 0.0000500 | loss  0.0430 | ms/batch 16353.65 |
+| step  3039 |  lr: 0.0000500 | loss  0.0526 | ms/batch 14869.66 |
+-----------------------------------------------------------------------
+| step  3040 | dev_acc  0.3789 | test_acc  0.4038 |
+train_time : 1240.59 | eval_time : 87.09
+-----------------------------------------------------------------------
+| step  3059 |  lr: 0.0000500 | loss  0.0399 | ms/batch 16000.47 |
+| step  3079 |  lr: 0.0000500 | loss  0.0434 | ms/batch 16294.11 |
+| step  3099 |  lr: 0.0000500 | loss  0.0359 | ms/batch 15452.46 |
+| step  3119 |  lr: 0.0000500 | loss  0.0527 | ms/batch 15779.98 |
+-----------------------------------------------------------------------
+| step  3120 | dev_acc  0.3860 | test_acc  0.4053 |
+train_time : 1270.54 | eval_time : 85.55
+-----------------------------------------------------------------------
+| step  3139 |  lr: 0.0000500 | loss  0.0503 | ms/batch 16126.89 |
+| step  3159 |  lr: 0.0000500 | loss  0.0407 | ms/batch 15664.86 |
+| step  3179 |  lr: 0.0000500 | loss  0.0430 | ms/batch 15582.95 |
+| step  3199 |  lr: 0.0000500 | loss  0.0536 | ms/batch 14908.14 |
+-----------------------------------------------------------------------
+| step  3200 | dev_acc  0.3758 | test_acc  0.3920 |
+train_time : 1245.66 | eval_time : 85.51
+-----------------------------------------------------------------------
+| step  3219 |  lr: 0.0000500 | loss  0.0318 | ms/batch 16413.03 |
+| step  3239 |  lr: 0.0000500 | loss  0.0306 | ms/batch 15296.97 |
+| step  3259 |  lr: 0.0000500 | loss  0.0411 | ms/batch 15110.47 |
+| step  3279 |  lr: 0.0000500 | loss  0.0478 | ms/batch 15169.16 |
+-----------------------------------------------------------------------
+| step  3280 | dev_acc  0.3821 | test_acc  0.3951 |
+train_time : 1239.79 | eval_time : 85.28
+-----------------------------------------------------------------------
+
+training ends in 3280 steps
+best dev acc: 0.3907 (at epoch 30)
+final test acc: 0.4038
+total_time : 62743.19
+
